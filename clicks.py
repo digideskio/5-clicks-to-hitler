@@ -1,17 +1,19 @@
-import http.client
+import requests
 import json
 
+ENDPOINT = 'https://en.wikipedia.org/w/api.php'
 
-conn = http.client.HTTPSConnection("en.wikipedia.org")
-
-headers = {
-    'cache-control': "no-cache",
+parameters = {
+    'action': 'query',
+    'format': 'json',
+    'prop': 'linkshere',
+    'pageids': 801662,
+    'lhprop': 'pageid|title',
+    'lhnamespace': 0,
+    'lhlimit': 50,
+    'lhcontinue': ''
 }
 
-conn.request("GET", "/w/api.php?action=query&format=json&prop=linkshere&pageids=801662&lhprop=pageid%7Ctitle&lhnamespace=0&lhlimit=50&lhcontinue=", headers=headers)
+r = requests.get(ENDPOINT, params=parameters)
 
-res = conn.getresponse()
-
-data = res.read().decode("utf-8")
-
-print(json.loads(data))
+print(json.loads(r.text))
